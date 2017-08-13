@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather forecast</title>
+
+
+    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    {% load staticfiles%}
+    <script src="{%static 'weather_forecast/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{%static 'weather_forecast/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'weather_forecast/css/otherStylesheet.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'weather_forecast/css/myStylesheet.css' %}">
+</head>
+<body>
+
+
+
+
+<div class="container">
+    <div class="row margin-tops page_block">
+        <div class="col-lg-7 col-lg-offset-2 ">
+            <form class="form-inline" action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <strong>{{ form.city.label }}</strong>
+                    {{ form.city }}
+                </div>
+                <div class="form-group">
+                    <strong>{{ form.date.label }}</strong>
+                    <div class="input-group date" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                            {{ form.date }}
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                    </div>
+                </div>
+            <input class="btn btn-primary" type="submit" value="Search" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<h2><strong>
+{% if error %}
+    <div class="alert alert-danger fade in col-lg-6 col-lg-offset-3 margin-tops">
+        {{ error }}
+    </div>
+{% else %}
+    <div class="alert alert-success alert-dismissable col-lg-6 col-lg-offset-3 text-center margin-tops">
+        Result from: {{ from }}
+    </div>
+{% endif %}
+</strong></h2>
+
+<!--home-content-top starts from here-->
+<section class="home-content-top">
+  <div class="container">
+
+    <div class="clearfix"></div>
+    <h1 class="heading1"></h1>
+
+    <div class="tabbable-panel margin-tops4 ">
+    <div class="row page_block">
+      <div class="tabbable-line ">
+        <ul class="nav nav-tabs tabtop  tabsetting">
+            {% for day, date in dates %}
+                {% if forloop.counter == 1 %}
+                    <li class="active"> <a href="#tab_default_{{ forloop.counter }}" data-toggle="tab"> {{ day }}  {{ date }} </a></li>
+                 {% else %}
+                    <li> <a href="#tab_default_{{ forloop.counter }}" data-toggle="tab">{{ day }}  {{ date }}  </a> </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="tab-content margin-tops ">
+           {% for forecast_set in forecast_list %}
+                {% if forloop.counter == 1 %}
+                    <div class="tab-pane active fade in" id="tab_default_{{ forloop.counter }}">
+                 {% else %}
+                    <div class="tab-pane fade" id="tab_default_{{ forloop.counter }}">
+                {% endif %}
+
+                 <div id="no-more-tables">
+                    <table class="col-sm-12 table table-striped table-hover cf ">
+                		<thead class="cf">
+                			<tr>
+        						<th>Time</th>
+                                <th>Temperature, C&deg</th>
+                                <th>Description</th>
+                                <th>Clouds, %</th>
+                                <th>Humidity, %</th>
+                				<th>Pressure, hPa</th>
+                				<th>Wind, m/s</th>
+                			</tr>
+                		</thead>
+                		<tbody>
+                			{% for forecast in forecast_set %}
+                             <tr>
+        						<td data-title="Time">
+                                    {{forecast.dt_txt.hour}}:00
+                                    <img src="http://openweathermap.org/img/w/{{ forecast.weather.icon }}.png"/>
+                                </td>
+                                <td data-title="Temperature, C&deg">{{ forecast.temp|floatformat:1 }}</td>
+                				<td data-title="Description">{{ forecast.weather.description }}</td>
+                                <td data-title="Clouds, %">{{ forecast.clouds }}</td>
+                                <td data-title="Humidity, %">{{ forecast.humidity }}</td>
+                				<td data-title="Pressure, hpa">{{ forecast.pressure }}</td>
+                				<td data-title="Wind, m/s">{{ forecast.wind_speed }}, {{ forecast.wind_dir }}</td>
+                			</tr>
+                            {% endfor %}
+            	    	</tbody>
+                	</table>
+                 </div>
+
+           </div>
+           {% endfor %}
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+<!--home-content-top ends here-->
+
+<br/>
+<br/>
+<div class="container ">
+    <div class="row page_block">
+        <div class="col-lg-8">
+            <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                    src="https://www.google.com/maps/embed/v1/view?key=AIzaSyCLNrC6Wwp4vLhtHHLsZaPSCTDWWYrr6N0&center={{ city.coord_lat }},{{ city.coord_lon }}&zoom=9&maptype=satellite">
+
+            </iframe>
+        </div>
+        <div class="col-lg-4">
+            <address>
+
+                 <div id="no-more-tables">
+                    <table class="table-striped table-condensed cf">
+                		<thead class="cf">
+                			<tr>
+        						<th colspan="2"><h2>City information</h2></th>
+                			</tr>
+                		</thead>
+                		<tbody>
+                             <tr>
+        						<th>Name</th>
+                				<td>{{ city.name }}</td>
+                			</tr>
+                            <tr>
+        						<th>Country</th>
+                				<td>{{ city.country }}</td>
+                			</tr>
+                            <tr>
+        						<th>Latitude</th>
+                				<td>{{ city.coord_lat }}</td>
+                			</tr>
+                            <tr>
+        						<th>Longitude</th>
+                				<td>{{ city.coord_lon }}</td>
+                			</tr>
+            	    	</tbody>
+                	</table>
+                 </div>
+
+            </address>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
