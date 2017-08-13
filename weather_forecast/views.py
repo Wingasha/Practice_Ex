@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .forms import SearchForm
 from django.views import View
-from weather_forecast.models import Forecast, City
 import datetime
+
+from weather_forecast.models import Forecast, City
 
 
 class ForecastPage(View):
@@ -23,7 +24,7 @@ class ForecastPage(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            context = Forecast.get_forecasts(data['city'], data['date'])
+            context = Forecast.near_forecast.get_forecast(data['city'], data['date'])
             context['dates'] = ForecastPage.get_dates_for_view(data['date'])
         else:
             """В принципе, форма всегда будет валидна, поскольку дату вести можно только через календарь, а вот в поле
@@ -54,4 +55,4 @@ class ForecastPage(View):
         """
         Метод возвращает прогноз погоды, который отображается по умолчанию
         """
-        return Forecast.get_forecasts(ForecastPage.default_city, datetime.datetime.today().date())
+        return Forecast.near_forecast.get_forecast(ForecastPage.default_city, datetime.datetime.today().date())
