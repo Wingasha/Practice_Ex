@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name='forecast',
             managers=[
-                ('near_forecast', django.db.models.manager.Manager()),
+                ('next_five_days', django.db.models.manager.Manager()),
             ],
         ),
         migrations.AlterField(

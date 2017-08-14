@@ -17,8 +17,6 @@
 <body>
 
 
-
-
 <div class="container">
     <div class="row margin-tops page_block">
         <div class="col-lg-7 col-lg-offset-2 ">
@@ -45,8 +43,10 @@
 
 <h2><strong>
 {% if error %}
-    <div class="alert alert-danger fade in col-lg-6 col-lg-offset-3 margin-tops">
+    <div class="alert alert-danger fade in col-lg-6 col-lg-offset-3 text-center margin-tops">
         {{ error }}
+        <br />
+        Load default forecast for {{ city.name }}
     </div>
 {% else %}
     <div class="alert alert-success alert-dismissable col-lg-6 col-lg-offset-3 text-center margin-tops">
@@ -55,7 +55,7 @@
 {% endif %}
 </strong></h2>
 
-<!--home-content-top starts from here-->
+
 <section class="home-content-top">
   <div class="container">
 
@@ -122,7 +122,7 @@
     </div>
   </div>
 </section>
-<!--home-content-top ends here-->
+
 
 <br/>
 <br/>
@@ -169,10 +169,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 </body>
 </html>

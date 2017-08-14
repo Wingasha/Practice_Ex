@@ -1,4 +1,4 @@
 *.pyc
-forecast_db.sqlite3
+forecast_db
 .idea/
 __pycache__/

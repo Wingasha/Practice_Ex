@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 
 class CityDoesNotExist(Exception):
@@ -41,13 +42,13 @@ def save_to_database(response):
                                                                                         'icon': icon})[0]
 
         forecast['main'].pop('temp_kf')
-        Forecast.objects.get_or_create(dt_txt=forecast['dt_txt'], city=city, defaults={**forecast['main'],
-                                                                                       'weather': weather,
-                                                                                       'clouds': forecast['clouds']['all'],
-                                                                                       'wind_speed': forecast['wind']['speed'],
-                                                                                       'wind_dir': deg_to_compass(forecast['wind']['deg']),
-                                                                                       'snow': forecast.get('snow', {'3h': 0})['3h'],
-                                                                                       'rain': forecast.get('rain', {'3h': 0}).get('3h', 0)})
+        Forecast.objects.get_or_create(dt_txt=forecast['dt_txt'], city=city,
+                                       defaults={**forecast['main'], 'weather': weather,
+                                                 'clouds': forecast['clouds']['all'],
+                                                 'wind_speed': forecast['wind']['speed'],
+                                                 'wind_dir': deg_to_compass(forecast['wind']['deg']),
+                                                 'snow': forecast.get('snow', {'3h': 0})['3h'],
+                                                 'rain': forecast.get('rain', {'3h': 0}).get('3h', 0)})
 
         """forecast.get('snow', {'3h': 0})['3h'] - работает, а forecast.get('rain', {'3h': 0})['3h'] выдаёт ошибку
         ключа. Для обхода магической аномалии используется форма forecast.get('rain', {'3h': 0}).get('3h', 0)"""
@@ -61,3 +62,12 @@ def request_to_api(city_name):
     if response['city']['name'] != city_name:
         raise CityDoesNotExist
     save_to_database(response)
+
+
+def get_dates_for_view(date):
+    """
+    Формирует и возвращает список из пар название_дня_недели - число_месяц для подстановки в заголовки вкладок
+    :param date: datetime object
+    """
+    dates = [date + datetime.timedelta(days=x) for x in range(0, 5)]
+    return zip([x.strftime("%A") for x in dates], ['{:02d}.{:02d}'.format(x.day, x.month) for x in dates])
