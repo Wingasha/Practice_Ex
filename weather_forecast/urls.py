@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from . import views
+from weather_forecast import views
 
 app_name = 'weather_forecast'
 urlpatterns = [

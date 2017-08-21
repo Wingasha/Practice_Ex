@@ -1,3 +1,5 @@
-# Practice_Ex
-1) Переходим в папку проекта, выполняем команду python manage.py runserver
-2) В строке браузер переходим на http://127.0.0.1:8000/weather_forecast/
+# The practical job on creation of the web application "Weather forecast" with use of https://openweathermap.org/api
+For start to pass into the directory Practice_Ex and to execute commands:
+1) python manage.py migrate
+2) python manage.py runserver
+Further in the browser to transfer on http://127.0.0.1:8000/weather_forecast/

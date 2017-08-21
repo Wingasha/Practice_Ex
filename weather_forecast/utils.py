@@ -22,7 +22,7 @@ def deg_to_compass(num):
     return arr[(val % 16)]
 
 
-def save_to_database(response):
+def _save_to_database(response):
     from weather_forecast.models import City, Forecast, Weather, WeatherIcon, WeatherGroup
 
     city_inf = response['city']
@@ -61,7 +61,7 @@ def request_to_api(city_name):
     response = response.json()
     if response['city']['name'] != city_name:
         raise CityDoesNotExist
-    save_to_database(response)
+    _save_to_database(response)
 
 
 def get_dates_for_view(date):
