@@ -1,5 +1,6 @@
 # The practical job on creation of the web application "Weather forecast" with use of https://openweathermap.org/api
-For start to pass into the directory Practice_Ex and to execute commands:
+At first it is necessary to set dependences from the requirements.txt.
+To run the application go to the directory Practice_Ex and to execute commands:
 1) python manage.py migrate
 2) python manage.py runserver
 
