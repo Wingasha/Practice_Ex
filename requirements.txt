@@ -1,3 +1,2 @@
 requests==2.18.1
 Django==1.10.5
-django-angular=1.1.4

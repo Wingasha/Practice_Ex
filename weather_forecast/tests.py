@@ -31,7 +31,7 @@ class TestModel(TestCase):
         city_name = 'Zaporozhye'
         date = datetime.datetime.today().date()
         result = models.Forecast.next_five_days.get_context(city_name, date)
-        self.assertEqual(result['error'], 'The city with the specified name does not exist')
+        self.assertEqual(result['error'], "The city with the specified name does not exist. Maybe you meant the 'Zaporizhzhya'")
 
     def test_get_forecast_with_future_date(self):
         """Проверка поиска прогноза за датой в будущем (возможно перекинуть проверку на фронтэнд)"""

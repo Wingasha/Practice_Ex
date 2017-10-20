@@ -47,20 +47,18 @@ def _save_to_database(response):
                                                  'clouds': forecast['clouds']['all'],
                                                  'wind_speed': forecast['wind']['speed'],
                                                  'wind_dir': deg_to_compass(forecast['wind']['deg']),
-                                                 'snow': forecast.get('snow', {'3h': 0})['3h'],
+                                                 'snow': forecast.get('snow', {'3h': 0}).get('3h', 0),
                                                  'rain': forecast.get('rain', {'3h': 0}).get('3h', 0)})
-
-        """forecast.get('snow', {'3h': 0})['3h'] - работает, а forecast.get('rain', {'3h': 0})['3h'] выдаёт ошибку
-        ключа. Для обхода магической аномалии используется форма forecast.get('rain', {'3h': 0}).get('3h', 0)"""
 
 
 def request_to_api(city_name):
+    # нужно добавить отбработку ошибки в случае, если API не работает
     response = requests.get(
         'http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&APPID=457a76f25e6c0e0c0ac1ff4b1f6f0658'.format(
             city_name))
     response = response.json()
     if response['city']['name'] != city_name:
-        raise CityDoesNotExist
+        raise CityDoesNotExist(response['city']['name'])
     _save_to_database(response)
 
 

@@ -74,7 +74,7 @@ class ForecastManager(models.Manager):
         :param search_date: datetime
         :return: context: dict
         """
-        context = {'from': 'Database', 'forecast_list': [], 'error': ''}
+        context = {'from': 'Database', 'forecast_list': []}
 
         try:
             city = City.objects.get(name=city_name)
@@ -83,8 +83,8 @@ class ForecastManager(models.Manager):
                 request_to_api(city_name)
                 context['from'] = 'API'
                 city = City.objects.get(name=city_name)
-            except CityDoesNotExist:
-                context['error'] = "The city with the specified name does not exist"
+            except CityDoesNotExist as error:
+                context['error'] = "The city with the specified name does not exist. Maybe you meant the '%s'" % error
                 return context
         context['city'] = city
 
