@@ -57,8 +57,8 @@ def request_to_api(city_name):
         'http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&APPID=457a76f25e6c0e0c0ac1ff4b1f6f0658'.format(
             city_name))
     response = response.json()
-    if response['city']['name'] != city_name:
-        raise CityDoesNotExist(response['city']['name'])
+    if response['cod'] == "404":
+        raise CityDoesNotExist()
     _save_to_database(response)
 
 

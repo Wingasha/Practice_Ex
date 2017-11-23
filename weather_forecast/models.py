@@ -83,8 +83,8 @@ class ForecastManager(models.Manager):
                 request_to_api(city_name)
                 context['from'] = 'API'
                 city = City.objects.get(name=city_name)
-            except CityDoesNotExist as error:
-                context['error'] = "The city with the specified name does not exist. Maybe you meant the '%s'" % error
+            except CityDoesNotExist:
+                context['error'] = "The city with the specified name does not exist."
                 return context
         context['city'] = city
 
